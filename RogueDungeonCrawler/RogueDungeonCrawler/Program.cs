@@ -10,6 +10,12 @@ namespace RogueDungeonCrawler
     {
         static void Main(string[] args)
         {
+            //Gameloop
+            while (true)
+            {
+
+            }
         }
+
     }
 }
