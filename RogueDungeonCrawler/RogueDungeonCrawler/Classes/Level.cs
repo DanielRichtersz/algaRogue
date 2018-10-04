@@ -21,22 +21,27 @@ namespace RogueDungeonCrawler
 
         //Matrix
         Room[,] Map;
+        Hallway[] Hallways;
 
         public Level(int width, int height)
         {
-            this.Width = width;
-            this.Height = height;
+            Width = width;
+            Height = height;
             //Generate map
             this.GenerateMap();
             this.Player = new Player(this.StartRoom);
-
-
         }
 
         private void GenerateMap()
         {
             //Generate rooms and hallways
-
+            for(int i = 0; i < Height; i++)
+            {
+                for(int j = 0; j < Width; j++)
+                {
+                    Map[j, i] = new Room();
+                }
+            }
             //Calculate Minimal Spending Tree 
 
             //Remove hallways according to MST
@@ -47,6 +52,11 @@ namespace RogueDungeonCrawler
             //this.StartRoom = this.Map[height,0]
             //this.EndRoom = this.Map[0, width]
             throw new NotImplementedException();
+        }
+
+        private void LinkRooms(Room roomOne, Room roomTwo)
+        {
+
         }
 
         private bool RemoveHallway(Room room, Direction direction)
