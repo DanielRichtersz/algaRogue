@@ -6,38 +6,12 @@ using System.Threading.Tasks;
 
 namespace RogueDungeonCrawler.Classes
 {
-    class Player
+    public class Player
     {
-        private int X;
-        private int Y;
-
-        public Player(int startingX, int startingY)
+        Room currentRoom;
+        public Player(Room startingRoom)
         {
-            this.X = startingX;
-            this.Y = startingY;
+            this.currentRoom = startingRoom;
         }
-
-        #region Getters & Setters
-        public int GetX()
-        {
-            return this.X;
-        }
-
-        public int GetY()
-        {
-            return this.Y;
-        }
-
-        public void SetX(int X)
-        {
-            this.X = X;
-        }
-
-        public void SetY(int Y)
-        {
-            this.Y = Y;
-        }
-        #endregion
-
     }
 }

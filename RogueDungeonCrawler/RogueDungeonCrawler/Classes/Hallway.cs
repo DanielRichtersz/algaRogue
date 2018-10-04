@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 
 namespace RogueDungeonCrawler.Classes
 {
-    class Hallway
+    public class Hallway
     {
-        int enemy { get; set; }
-        bool isCollapsed { get; set; }
+        public int enemy { get; set; }
+        public bool isCollapsable { get; set; }
+        Room RoomOne;
+        Room RoomTwo;
 
-        public Hallway(int enemy, bool collapsed)
+        public Hallway(int enemy, Room roomOne, Room roomTwo)
         {
             this.enemy = enemy;
-            this.isCollapsed = collapsed;
+            this.RoomOne = roomOne;
+            this.RoomTwo = roomTwo;
         }
     }
 }

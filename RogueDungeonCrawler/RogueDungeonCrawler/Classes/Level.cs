@@ -1,4 +1,5 @@
 ﻿using RogueDungeonCrawler.Classes;
+using RogueDungeonCrawler.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,30 +9,55 @@ using System.Threading.Tasks;
 
 namespace RogueDungeonCrawler
 {
-    class Level
+    public class Level
     {
-        private Dictionary<Room, Hallway> Map { get; set; }
         int Width { get; set; }
         int Height { get; set; }
         public Player Player { get; set; }
 
+        //Start en endroom
+        Room StartRoom;
+        Room EndRoom;
+
+        //Matrix
+        Room[,] Map;
 
         public Level(int width, int height, int playerX, int playerY)
         {
             this.Width = width;
             this.Height = height;
+            //Generate map
+            this.generateMap();
             this.Player = new Player(playerX, playerY);
 
-            //Generate map
 
         }
 
-        public handleInput(enum direction)
+        private void GenerateMap()
         {
-            Room room = player.move(direction);
+            //Generate rooms and hallways
 
+            //Calculate Minimal Spending Tree 
+
+            //Remove hallways according to MST
+
+
+            //Set this.StartRoom and this.EndRoom
+            //this.Map = map;
+            //this.StartRoom = this.Map[height,0]
+            //this.EndRoom = this.Map[0, width]
+            throw new NotImplementedException();
         }
 
+        private bool RemoveHallway(Room room, Direction direction)
+        {
 
+            //Return false when the hallway direction doesn't exist
+            return false;
+        }
+
+        public void HandleInput(direction) {
+        
+        }
     }
 }
