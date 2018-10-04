@@ -8,16 +8,27 @@ namespace RogueDungeonCrawler.Classes
 {
     public class Hallway
     {
-        public int enemy { get; set; }
-        public bool isCollapsable { get; set; }
+        public int Enemy { get; set; }
+        public bool IsCollapsable { get; set; }
         Room RoomOne;
         Room RoomTwo;
 
         public Hallway(int enemy, Room roomOne, Room roomTwo)
         {
-            this.enemy = enemy;
+            this.Enemy = enemy;
             this.RoomOne = roomOne;
             this.RoomTwo = roomTwo;
+        }
+
+        public Room GetConnectedRoom(Room room)
+        {
+            if (room == this.RoomOne)
+            {
+                return this.RoomTwo;
+            } else
+            {
+                return this.RoomOne;
+            }
         }
     }
 }

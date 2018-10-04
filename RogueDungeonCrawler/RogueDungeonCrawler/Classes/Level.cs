@@ -22,13 +22,13 @@ namespace RogueDungeonCrawler
         //Matrix
         Room[,] Map;
 
-        public Level(int width, int height, int playerX, int playerY)
+        public Level(int width, int height)
         {
             this.Width = width;
             this.Height = height;
             //Generate map
-            this.generateMap();
-            this.Player = new Player(playerX, playerY);
+            this.GenerateMap();
+            this.Player = new Player(this.StartRoom);
 
 
         }

@@ -8,10 +8,10 @@ namespace RogueDungeonCrawler.Classes
 {
     public class Player
     {
-        Room currentRoom;
+        Room CurrentRoom;
         public Player(Room startingRoom)
         {
-            this.currentRoom = startingRoom;
+            this.CurrentRoom = startingRoom;
         }
     }
 }
