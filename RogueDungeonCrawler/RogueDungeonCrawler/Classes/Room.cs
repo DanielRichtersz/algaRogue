@@ -18,6 +18,7 @@ namespace RogueDungeonCrawler.Classes
 
         public Room()
         {
+
         }
 
         public Hallway GetHallway(Direction direction)
