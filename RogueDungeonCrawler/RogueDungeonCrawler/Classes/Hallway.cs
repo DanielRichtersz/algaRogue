@@ -10,8 +10,8 @@ namespace RogueDungeonCrawler.Classes
     {
         public int Enemy { get; set; }
         public bool IsCollapsable { get; set; }
-        Room RoomOne;
-        Room RoomTwo;
+        public Room RoomOne { get; set; }
+        public Room RoomTwo { get; set; }
 
         public Hallway(int enemy, Room roomOne)
         {

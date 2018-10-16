@@ -15,7 +15,7 @@ namespace RogueDungeonCrawler.Classes
         //array 0=N 1=O 2=Z 3=W
         Hallway[] Hallways = new Hallway[4];
 
-        public Room(bool isStart, bool isEnd, int x, int y)
+        public Room()
         {
             this.IsVisited = false;
         }

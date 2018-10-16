@@ -15,6 +15,24 @@ namespace RogueDungeonCrawler
         int Height { get; set; }
         public Player Player { get; set; }
 
+        //Algorithms
+        public Dictionary<Room, HashSet<Room>> AdjacencyList { get; } = new Dictionary<Room, HashSet<Room>>();
+        public void AddVertex(Room vertex)
+        {
+            AdjacencyList[vertex] = new HashSet<Room>();
+        }
+
+        public void AddEdge(Hallway edge)
+        {
+            if (AdjacencyList.ContainsKey(edge.RoomOne) && AdjacencyList.ContainsKey(edge.RoomTwo))
+            {
+                AdjacencyList[edge.RoomOne].Add(edge.RoomTwo);
+                AdjacencyList[edge.RoomTwo].Add(edge.RoomOne);
+            }
+        }
+
+        //End Algorithms part   
+
         //Start en endroom
         Room StartRoom;
         Room EndRoom;
@@ -102,7 +120,6 @@ namespace RogueDungeonCrawler
 
         private bool RemoveHallway(Room room, Direction direction)
         {
-
             //Return false when the hallway direction doesn't exist
             return false;
         }
