@@ -101,10 +101,10 @@ namespace RogueDungeonCrawler.Classes
                 }
             }
 
-            Func<T, IEnumerable<T>> shortestPath = v => {
-                var path = new List<T> { };
+            Func<Room, IEnumerable<Room>> shortestPath = v => {
+                var path = new List<Room> { };
 
-                var current = v;
+                Room current = v;
                 while (!current.Equals(startRoom))
                 {
                     path.Add(current);
