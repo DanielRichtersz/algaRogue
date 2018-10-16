@@ -9,7 +9,7 @@ namespace RogueDungeonCrawler.Classes
     public class Algorithms
     {
 
-        public BreadthFirstSearch(Level level, Room targetRoom)
+        public void BreadthFirstSearch(Level level, Room targetRoom)
         {
             //First-in First-out set
 
