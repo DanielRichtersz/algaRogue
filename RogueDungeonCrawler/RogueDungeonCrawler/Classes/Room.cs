@@ -9,7 +9,8 @@ namespace RogueDungeonCrawler.Classes
 {
     public class Room
     {
-        bool IsVisited { get; set; }
+        public bool IsVisited { get; set; }
+        public bool algIsVisited { get; set; }
 
         //array 0=N 1=O 2=Z 3=W
         Hallway[] Hallways = new Hallway[4];
