@@ -10,6 +10,7 @@ namespace RogueDungeonCrawler
     {
         static void Main(string[] args)
         {
+            Level level = new Level(5,5);
             //Gameloop
             while (true)
             {
