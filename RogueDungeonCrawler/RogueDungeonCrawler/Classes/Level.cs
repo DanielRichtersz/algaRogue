@@ -21,7 +21,6 @@ namespace RogueDungeonCrawler
 
         //Matrix
         Room[,] Map;
-        Hallway[] Hallways;
 
         public Level(int width, int height)
         {
@@ -76,16 +75,34 @@ namespace RogueDungeonCrawler
             //Remove hallways according to MST
         }
 
-        private void LinkRooms(Room roomOne, Room roomTwo)
-        {
-
-        }
-
         private bool RemoveHallway(Room room, Direction direction)
         {
-
-            //Return false when the hallway direction doesn't exist
-            return false;
+            Hallway removableHallway = room.GetHallway(direction);
+            if(removableHallway != null)
+            {
+                Room connectedRoom = removableHallway.GetConnectedRoom(room);
+                room.SetHallway(direction, null);
+                switch (direction)
+                {
+                    case Direction.North:
+                        connectedRoom.SetHallway(Direction.South, null);
+                        break;
+                    case Direction.East:
+                        connectedRoom.SetHallway(Direction.West, null);
+                        break;
+                    case Direction.South:
+                        connectedRoom.SetHallway(Direction.North, null);
+                        break;
+                    case Direction.West:
+                        connectedRoom.SetHallway(Direction.East, null);
+                        break;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void SetStartRoom(int x, int y)
@@ -250,6 +267,21 @@ namespace RogueDungeonCrawler
             Console.WriteLine("give x and y coördinates of the endroom like so 1,5");
             CheckStartInput(Console.ReadLine(), false);
             DrawMap();
+        }
+
+        public void HandleTalisman()
+        {
+
+        }
+
+        public void HandleGrenade()
+        {
+
+        }
+
+        public void HandleCompass()
+        {
+
         }
 
         private void CheckStartInput(string RoomCoördinates, bool isStart)
