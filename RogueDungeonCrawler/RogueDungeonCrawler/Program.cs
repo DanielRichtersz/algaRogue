@@ -23,6 +23,15 @@ namespace RogueDungeonCrawler
                     case ConsoleKey.E:
                         level.HandleSetEnd();
                         break;
+                    case ConsoleKey.T:
+                        level.HandleTalisman();
+                        break;
+                    case ConsoleKey.G:
+                        level.HandleGrenade();
+                        break;
+                    case ConsoleKey.C:
+                        level.HandleCompass();
+                        break;
                 }
             }
         }
