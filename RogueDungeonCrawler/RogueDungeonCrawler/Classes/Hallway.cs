@@ -13,10 +13,14 @@ namespace RogueDungeonCrawler.Classes
         Room RoomOne;
         Room RoomTwo;
 
-        public Hallway(int enemy, Room roomOne, Room roomTwo)
+        public Hallway(int enemy, Room roomOne)
         {
             this.Enemy = enemy;
             this.RoomOne = roomOne;
+        }
+
+        public void SetSecondRoom(Room roomTwo)
+        {
             this.RoomTwo = roomTwo;
         }
 

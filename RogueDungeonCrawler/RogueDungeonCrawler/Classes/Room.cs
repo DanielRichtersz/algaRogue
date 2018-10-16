@@ -23,5 +23,10 @@ namespace RogueDungeonCrawler.Classes
         {
             return this.Hallways[(int)direction];
         }
+
+        public void SetHallway(Direction direction, Hallway hallway)
+        {
+            this.Hallways[(int)direction] = hallway;
+        }
     }
 }
