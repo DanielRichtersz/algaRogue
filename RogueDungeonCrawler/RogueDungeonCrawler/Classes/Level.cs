@@ -15,24 +15,6 @@ namespace RogueDungeonCrawler
         int Height { get; set; }
         public Player Player { get; set; }
 
-        //Algorithms
-        public Dictionary<Room, HashSet<Room>> AdjacencyList { get; } = new Dictionary<Room, HashSet<Room>>();
-        public void AddVertex(Room vertex)
-        {
-            AdjacencyList[vertex] = new HashSet<Room>();
-        }
-
-        public void AddEdge(Hallway edge)
-        {
-            if (AdjacencyList.ContainsKey(edge.RoomOne) && AdjacencyList.ContainsKey(edge.RoomTwo))
-            {
-                AdjacencyList[edge.RoomOne].Add(edge.RoomTwo);
-                AdjacencyList[edge.RoomTwo].Add(edge.RoomOne);
-            }
-        }
-
-        //End Algorithms part   
-
         //Start en endroom
         Room StartRoom;
         Room EndRoom;
@@ -48,6 +30,26 @@ namespace RogueDungeonCrawler
             //Generate map
             this.GenerateMap();
             //this.Player = new Player(this.StartRoom);
+        }
+
+        public Room[,] GetMap()
+        {
+            return this.Map;
+        }
+
+        public Room GetRoom(Room room)
+        {
+            for (int i = 0; i < this.Width; i++)
+            {
+                for (int j = 0; j < this.Height; j++)
+                {
+                    if (Map[j,i] == room)
+                    {
+                        return Map[j, i];
+                    }
+                }
+            }
+            return null;
         }
 
         private void GenerateMap()
