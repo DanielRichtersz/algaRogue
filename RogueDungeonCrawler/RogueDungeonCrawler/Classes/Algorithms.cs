@@ -77,6 +77,34 @@ namespace RogueDungeonCrawler.Classes
             return visited;
         }
 
+        public List<Room> DijkstraShortestPath(Level level, Room startRoom, Room endRoom)
+        {
+            var previous = new Dictionary<Room, Room>();
+            var distances = new Dictionary<Room, int>();
+            var nodes = new List<Room>();
+
+            List<Room> path = null;
+
+            foreach (var vertex in level.GetMap())
+            {
+                if (vertex.IsStart)
+                {
+                    distances[vertex] = 0;
+                }
+                else
+                {
+                    distances[vertex] = int.MaxValue;
+                }
+
+                nodes.Add(vertex);
+            }
+
+            while (nodes.Count != 0)
+            {
+                
+            }
+        }
+
         public Func<Room, IEnumerable<Room>> ShortestPathFunction<T>(Level level, Room startRoom)
         {
             //Contains previous node from destination node to starting node

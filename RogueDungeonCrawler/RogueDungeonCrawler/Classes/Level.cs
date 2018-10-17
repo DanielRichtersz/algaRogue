@@ -22,10 +22,9 @@ namespace RogueDungeonCrawler
         //Matrix
         Room[,] Map;
 
-        public Level(int width, int height)
+        public Level()
         {
-            Width = width;
-            Height = height;
+            Start();
             //Generate map
             this.GenerateMap();
             this.DrawMap();
@@ -289,6 +288,14 @@ namespace RogueDungeonCrawler
             DrawMap();
         }
 
+
+        private void Start()
+        {
+            System.Console.Clear();
+            Console.WriteLine("Enter the width and height of the dungeon like 5,5 (the values can not be larger than 10):");
+            CheckInput(Console.ReadLine());
+        }
+
         public void HandleTalisman()
         {
 
@@ -376,7 +383,71 @@ namespace RogueDungeonCrawler
         }
 
         //public void HandleInput(direction) {
-        
+
         //}
+
+        private void CheckInput(string size)
+        {
+            if (size.ToLower().Contains(',') && !size.ToLower().Contains(' '))
+            {
+                string[] coördinates = size.Split(',');
+                //check if coördinates are integers
+                bool isNumericWidth = int.TryParse(coördinates[0], out int width);
+                bool isNumericHeigth = int.TryParse(coördinates[1], out int height);
+                if (isNumericWidth && isNumericHeigth && (width <= 10) && (height <= 10))
+                {
+                    Width = width;
+                    Height = height;
+                }
+                else if (!isNumericWidth)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write(coördinates[0]);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(" is not a valid number");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine();
+                    Start();
+                }
+                else if (!isNumericHeigth)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine(coördinates[1]);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(" is not a valid number");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine();
+                    Start();
+                }
+                else if (width > 10)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine(coördinates[0]);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(" can not be greater than 10");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine();
+                    Start();
+                }
+                else if (height > 10)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine(coördinates[1]);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(" can not be greater than 10");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine();
+                    Start();
+                }
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("this is not a correct input value");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine();
+                Start();
+            }
+        }
     }
 }
