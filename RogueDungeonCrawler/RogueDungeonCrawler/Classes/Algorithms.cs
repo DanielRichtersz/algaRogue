@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace RogueDungeonCrawler.Classes
 {
@@ -10,8 +8,6 @@ namespace RogueDungeonCrawler.Classes
     {
         private void PreVisit(Room vertex)
         {
-            Console.Write("Visiting vertext: ");
-            Console.Write(vertex);
             vertex.IsVisited = true;
         }
 
@@ -41,19 +37,19 @@ namespace RogueDungeonCrawler.Classes
             return neighbors;
         }
 
-        public HashSet<Room> BreadthFirstSearch(Level level, Room startRoom)
+        public HashSet<Room> BreadthFirstSearch(Level level, Room startVertex)
         {
             var visited = new HashSet<Room>();
 
             //If the starting room doesn't exist, return empty
-            if (level.GetRoom(startRoom) != null)
+            if (level.GetRoom(startVertex) != null)
             {
                 return visited;
             }
 
             //Create queue and add starting room to the end of the queue
             var queue = new Queue<Room>();
-            queue.Enqueue(startRoom);
+            queue.Enqueue(startVertex);
 
             //While the queue is not empty
             while (queue.Count > 0)
@@ -68,6 +64,7 @@ namespace RogueDungeonCrawler.Classes
                 }
 
                 PreVisit(vertex);
+                level.DrawMap();
 
                 visited.Add(vertex);
 

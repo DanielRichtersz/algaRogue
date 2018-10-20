@@ -3,8 +3,7 @@ using RogueDungeonCrawler.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 
 namespace RogueDungeonCrawler
@@ -195,7 +194,7 @@ namespace RogueDungeonCrawler
             }
         }
 
-        private void DrawMap()
+        public void DrawMap()
         {
             System.Console.Clear();
             DrawLegenda();
@@ -313,14 +312,16 @@ namespace RogueDungeonCrawler
 
         public void HandleTalisman()
         {
+            this.CleanPath();
             Room startVertex = this.StartRoom;
             var shortestPath = this.Algorithms.ShortestPathFunction<Room>(this, this.StartRoom);
             List<Room> pathToEndRoom = (List<Room>)shortestPath(this.EndRoom);
             foreach (Room room in pathToEndRoom)
             {
                 room.IsVisited = true;
+                DrawMap();
+                Thread.Sleep(500);
             }
-            DrawMap();
             Console.WriteLine("The endroom is " + (pathToEndRoom.Count - 1) + " rooms away");
         }
 
