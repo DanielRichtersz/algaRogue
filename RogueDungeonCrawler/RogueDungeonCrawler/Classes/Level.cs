@@ -22,6 +22,9 @@ namespace RogueDungeonCrawler
         //Matrix
         Room[,] Map;
 
+        //Algorithms
+        Algorithms Algorithms;
+
         public Level()
         {
             Start();
@@ -29,6 +32,8 @@ namespace RogueDungeonCrawler
             this.GenerateMap();
             this.DrawMap();
             //this.Player = new Player(this.StartRoom);
+
+            this.Algorithms = new Algorithms();
         }
 
         public Room[,] GetMap()
@@ -219,6 +224,10 @@ namespace RogueDungeonCrawler
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                         }
+                        else if (currentRoom.IsVisited == true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                        }
                         Console.Write(currentRoom.GetSymbol());
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write(" - " + currentRoom.GetHallway(Direction.East).Enemy + " - ");
@@ -232,6 +241,10 @@ namespace RogueDungeonCrawler
                         else if (currentRoom.IsStart)
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
+                        }
+                        else if (currentRoom.IsVisited)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Blue;
                         }
                         Console.Write(currentRoom.GetSymbol());
                         Console.ForegroundColor = ConsoleColor.White;
@@ -278,6 +291,7 @@ namespace RogueDungeonCrawler
         {
             Console.WriteLine("give x and y coördinates of the startroom like so 1,5");
             CheckStartInput(Console.ReadLine(), true);
+            this.CleanPath();
             DrawMap();
         }
 
@@ -285,6 +299,7 @@ namespace RogueDungeonCrawler
         {
             Console.WriteLine("give x and y coördinates of the endroom like so 1,5");
             CheckStartInput(Console.ReadLine(), false);
+            this.CleanPath();
             DrawMap();
         }
 
@@ -298,7 +313,15 @@ namespace RogueDungeonCrawler
 
         public void HandleTalisman()
         {
-
+            Room startVertex = this.StartRoom;
+            var shortestPath = this.Algorithms.ShortestPathFunction<Room>(this, this.StartRoom);
+            List<Room> pathToEndRoom = (List<Room>)shortestPath(this.EndRoom);
+            foreach (Room room in pathToEndRoom)
+            {
+                room.IsVisited = true;
+            }
+            DrawMap();
+            Console.WriteLine("The endroom is " + (pathToEndRoom.Count - 1) + " rooms away");
         }
 
         public void HandleGrenade()
@@ -447,6 +470,15 @@ namespace RogueDungeonCrawler
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine();
                 Start();
+            }
+        }
+
+        //Sets the isVisited property of all rooms to false
+        public void CleanPath()
+        {
+            foreach (Room room in this.Map)
+            {
+                room.IsVisited = false;
             }
         }
     }

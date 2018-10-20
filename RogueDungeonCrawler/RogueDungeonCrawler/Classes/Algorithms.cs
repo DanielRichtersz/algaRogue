@@ -17,12 +17,21 @@ namespace RogueDungeonCrawler.Classes
 
         public List<Room> GetNeighbors(Level level, Room vertex)
         {
+            Room NorthNeighbor;
+            Room EastNeighbor;
+            Room SouthNeighbor;
+            Room WestNeighbor;
             //Iterate through array of hallway and get neighbors
             //check if the neighbors are visited
-            Room NorthNeighbor = level.GetRoom(vertex).GetHallway(Enum.Direction.North).GetConnectedRoom(vertex);
-            Room EastNeighbor = level.GetRoom(vertex).GetHallway(Enum.Direction.East).GetConnectedRoom(vertex);
-            Room SouthNeighbor = level.GetRoom(vertex).GetHallway(Enum.Direction.South).GetConnectedRoom(vertex);
-            Room WestNeighbor = level.GetRoom(vertex).GetHallway(Enum.Direction.West).GetConnectedRoom(vertex);
+            Hallway NorthNeighborHallway = level.GetRoom(vertex).GetHallway(Enum.Direction.North);
+            Hallway EastNeighborHallway = level.GetRoom(vertex).GetHallway(Enum.Direction.East);
+            Hallway SouthNeighborHallway = level.GetRoom(vertex).GetHallway(Enum.Direction.South);
+            Hallway WestNeighborHallway = level.GetRoom(vertex).GetHallway(Enum.Direction.West);
+
+            NorthNeighbor = NorthNeighborHallway == null ? null : NorthNeighborHallway.GetConnectedRoom(vertex);
+            EastNeighbor = EastNeighborHallway == null ? null : EastNeighborHallway.GetConnectedRoom(vertex);
+            SouthNeighbor = SouthNeighborHallway == null ? null : SouthNeighborHallway.GetConnectedRoom(vertex);
+            WestNeighbor = WestNeighborHallway == null ? null : WestNeighborHallway.GetConnectedRoom(vertex);
 
             List<Room> neighbors = new List<Room>();
             neighbors.Add(NorthNeighbor);
