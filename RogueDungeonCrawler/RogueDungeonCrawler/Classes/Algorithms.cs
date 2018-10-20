@@ -103,6 +103,8 @@ namespace RogueDungeonCrawler.Classes
             {
                 
             }
+            //Added return statement, else a ''not all paths return a value '' error was given
+            return path;
         }
 
         public Func<Room, IEnumerable<Room>> ShortestPathFunction<T>(Level level, Room startRoom)
