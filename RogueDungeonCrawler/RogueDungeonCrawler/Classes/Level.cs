@@ -246,7 +246,20 @@ namespace RogueDungeonCrawler
                         }
                         Console.Write(currentRoom.GetSymbol());
                         Console.ForegroundColor = ConsoleColor.White;
-                        Console.Write(" - " + currentRoom.GetHallway(Direction.East).Enemy + " - ");
+                        Hallway hallway = currentRoom.GetHallway(Direction.East);
+                        if (hallway.IsCollapsable)
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                        }
+                        if (hallway.IsCollapsed)
+                        {
+                            Console.Write(" - ~ - ");
+                        }
+                        else
+                        {
+                            Console.Write(" - " + hallway.Enemy + " - ");
+                        }
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                     else
                     {
@@ -276,7 +289,20 @@ namespace RogueDungeonCrawler
                             Console.Write("  ");
                             for (int k = 0; k < Width; k++)
                             {
-                                Console.Write(Map[j, k].GetHallway(Direction.South).Enemy + "       ");
+                                Hallway hallway = Map[j, k].GetHallway(Direction.South);
+                                if (hallway.IsCollapsable)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                                }
+                                if (hallway.IsCollapsed)
+                                {
+                                    Console.Write("~" + "       ");
+                                }
+                                else
+                                {
+                                    Console.Write(hallway.Enemy + "       ");
+                                }
+                                Console.ForegroundColor = ConsoleColor.White;
                             }
                         }
                         Console.WriteLine();
@@ -334,20 +360,20 @@ namespace RogueDungeonCrawler
             Room startVertex = this.StartRoom;
             var shortestPath = this.Algorithms.ShortestPathFunction<Room>(this, this.StartRoom);
             List<Room> pathToEndRoom = (List<Room>)shortestPath(this.EndRoom);
-            foreach (Room room in pathToEndRoom)
-            {
-                room.IsVisited = true;
-                DrawMap();
-                Console.WriteLine("You activate the talisman...");
-                Thread.Sleep(400);
+                foreach (Room room in pathToEndRoom)
+                {
+                    room.IsVisited = true;
+                    DrawMap();
+                    Console.WriteLine("You activate the talisman...");
+                    Thread.Sleep(400);
+                }
+                Console.WriteLine("The talisman whispers to you: 'The endroom is " + (pathToEndRoom.Count - 1) + " rooms away'");
             }
-            Console.WriteLine("The talisman whispers to you: 'The endroom is " + (pathToEndRoom.Count - 1) + " rooms away'");
-        }
 
         public void HandleGrenade()
         {
             DrawMap();
-            Console.WriteLine("You throw the grenade in the air, hoping it will hit something...");
+            Console.WriteLine("You throw the grenade in a random direction...");
         }
 
         public void HandleCompass()

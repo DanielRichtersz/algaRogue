@@ -6,11 +6,6 @@ namespace RogueDungeonCrawler.Classes
 {
     public class Algorithms
     {
-        private void PreVisit(Room vertex)
-        {
-            vertex.IsVisited = true;
-        }
-
         public List<Room> GetNeighbors(Level level, Room vertex)
         {
             Room NorthNeighbor;
@@ -24,10 +19,10 @@ namespace RogueDungeonCrawler.Classes
             Hallway SouthNeighborHallway = level.GetRoom(vertex).GetHallway(Enum.Direction.South);
             Hallway WestNeighborHallway = level.GetRoom(vertex).GetHallway(Enum.Direction.West);
 
-            NorthNeighbor = NorthNeighborHallway == null ? null : NorthNeighborHallway.GetConnectedRoom(vertex);
-            EastNeighbor = EastNeighborHallway == null ? null : EastNeighborHallway.GetConnectedRoom(vertex);
-            SouthNeighbor = SouthNeighborHallway == null ? null : SouthNeighborHallway.GetConnectedRoom(vertex);
-            WestNeighbor = WestNeighborHallway == null ? null : WestNeighborHallway.GetConnectedRoom(vertex);
+            NorthNeighbor = NorthNeighborHallway == null || NorthNeighborHallway.IsCollapsed ? null : NorthNeighborHallway.GetConnectedRoom(vertex);
+            EastNeighbor = EastNeighborHallway == null || EastNeighborHallway.IsCollapsed ? null : EastNeighborHallway.GetConnectedRoom(vertex);
+            SouthNeighbor = SouthNeighborHallway == null || SouthNeighborHallway.IsCollapsed ? null : SouthNeighborHallway.GetConnectedRoom(vertex);
+            WestNeighbor = WestNeighborHallway == null || WestNeighborHallway.IsCollapsed? null : WestNeighborHallway.GetConnectedRoom(vertex);
 
             List<Room> neighbors = new List<Room>();
             neighbors.Add(NorthNeighbor);
@@ -63,8 +58,7 @@ namespace RogueDungeonCrawler.Classes
                     continue;
                 }
 
-                PreVisit(vertex);
-                level.DrawMap();
+                //PreVisit possibility
 
                 visited.Add(vertex);
 

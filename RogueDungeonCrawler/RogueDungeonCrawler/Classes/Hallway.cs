@@ -10,6 +10,7 @@ namespace RogueDungeonCrawler.Classes
     {
         public int Enemy { get; set; }
         public bool IsCollapsable { get; set; }
+        public bool IsCollapsed { get; set; }
 
         public Room RoomOne { get; set; }
         public Room RoomTwo { get; set; }
@@ -18,6 +19,8 @@ namespace RogueDungeonCrawler.Classes
         {
             this.Enemy = enemy;
             this.RoomOne = roomOne;
+            this.IsCollapsable = true;
+            this.IsCollapsed = false;
         }
 
         public void SetSecondRoom(Room roomTwo)
