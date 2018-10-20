@@ -55,6 +55,23 @@ namespace RogueDungeonCrawler
             return null;
         }
 
+        internal void Move(Direction moveDirection)
+        {
+            Hallway moveDirectionHallway = this.StartRoom.GetHallway(moveDirection) ?? null;
+            if (moveDirectionHallway != null)
+            {
+                this.CleanPath();
+                this.StartRoom.IsStart = false;
+                this.StartRoom = this.StartRoom.GetHallway(moveDirection).GetConnectedRoom(this.StartRoom);
+                this.StartRoom.IsStart = true;
+                DrawMap();
+            }
+            else
+            {
+                Console.WriteLine("No room is accesible in this direction...");
+            }
+        }
+
         private void GenerateMap()
         {
             Random random = new Random();
@@ -266,8 +283,9 @@ namespace RogueDungeonCrawler
                     }
                 }
             }
+            Console.WriteLine("Available actions: Talisman (T), Handgrenade (G), Compass (C)");
         }
-        
+
         public void DrawLegenda()
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -320,19 +338,22 @@ namespace RogueDungeonCrawler
             {
                 room.IsVisited = true;
                 DrawMap();
-                Thread.Sleep(500);
+                Console.WriteLine("You activate the talisman...");
+                Thread.Sleep(400);
             }
-            Console.WriteLine("The endroom is " + (pathToEndRoom.Count - 1) + " rooms away");
+            Console.WriteLine("The talisman whispers to you: 'The endroom is " + (pathToEndRoom.Count - 1) + " rooms away'");
         }
 
         public void HandleGrenade()
         {
-
+            DrawMap();
+            Console.WriteLine("You throw the grenade in the air, hoping it will hit something...");
         }
 
         public void HandleCompass()
         {
-
+            DrawMap();
+            Console.WriteLine("You activate the magical compass...");
         }
 
         private void CheckStartInput(string RoomCoördinates, bool isStart)
