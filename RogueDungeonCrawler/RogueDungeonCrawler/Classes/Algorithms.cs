@@ -179,5 +179,55 @@ namespace RogueDungeonCrawler.Classes
 
             return shortestPath;
         }
+
+        public void PrimsSafetyProtocol(Level level, Room startRoom)
+        {
+            List<Room> visited = new List<Room>();
+            List<Room> unvisited = new List<Room>();
+            List<Hallway> notCollapsable = new List<Hallway>();
+            
+            //Add all nodes to the unvisited
+            foreach (Room room in level.GetMap())
+            {
+                unvisited.Add(room);
+            }
+
+            unvisited.Remove(startRoom);
+            visited.Add(startRoom);
+
+
+
+            while (unvisited.Count > 0)
+            {
+                Room lowestRoom = new Room();
+                Hallway lowestHallway = new Hallway(999, null);
+
+                foreach (Room n in visited)
+                {
+                    Hallway h = n.GetLowestLevelHallway(visited);
+                    if (h != null && h.Enemy < lowestHallway.Enemy)
+                    {
+                        lowestHallway = h;
+                        lowestRoom = h.GetConnectedRoom(n);
+                    }
+                }
+                if (lowestRoom == null)
+                {
+                    break;
+                }
+                notCollapsable.Add(lowestHallway);
+                visited.Add(lowestRoom);
+                unvisited.Remove(lowestRoom);
+            }
+
+            foreach (Hallway h in notCollapsable)
+            {
+                h.IsCollapsable = false;
+            }
+
+            //Explode random room
+            
+
+        }
     }
 }

@@ -31,6 +31,27 @@ namespace RogueDungeonCrawler.Classes
             this.Hallways[(int)direction] = hallway;
         }
 
+        public Hallway GetLowestLevelHallway(List<Room> visited)
+        {
+            Hallway lowest = new Hallway(999, new Room());
+            for (int i = 0; i < 4; i++)
+            {
+                if ((this.Hallways[i] != null 
+                    && this.Hallways[i].IsCollapsed == false 
+                    && visited.Contains(this.Hallways[i].GetConnectedRoom(this)) == false) 
+                    && this.Hallways[i].Enemy < lowest.Enemy)
+                {
+                    lowest = this.Hallways[i];
+                }
+            }
+            return lowest;
+        }
+
+        public Hallway[] GetHallways()
+        {
+            return this.Hallways;
+        }
+
         public char GetSymbol()
         {
             if (IsVisited)

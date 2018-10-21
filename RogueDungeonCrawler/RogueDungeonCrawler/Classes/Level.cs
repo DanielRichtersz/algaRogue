@@ -60,7 +60,6 @@ namespace RogueDungeonCrawler
             Hallway moveDirectionHallway = this.StartRoom.GetHallway(moveDirection) ?? null;
             if (moveDirectionHallway != null && moveDirectionHallway.IsCollapsed == false)
             {
-                this.CleanPath();
                 this.StartRoom.IsStart = false;
                 this.StartRoom = this.StartRoom.GetHallway(moveDirection).GetConnectedRoom(this.StartRoom);
                 this.StartRoom.IsStart = true;
@@ -247,9 +246,9 @@ namespace RogueDungeonCrawler
                         Console.Write(currentRoom.GetSymbol());
                         Console.ForegroundColor = ConsoleColor.White;
                         Hallway hallway = currentRoom.GetHallway(Direction.East);
-                        if (hallway.IsCollapsable)
+                        if (hallway.IsCollapsable == false)
                         {
-                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            Console.ForegroundColor = ConsoleColor.Yellow;
                         }
                         if (hallway.IsCollapsed)
                         {
@@ -290,9 +289,9 @@ namespace RogueDungeonCrawler
                             for (int k = 0; k < Width; k++)
                             {
                                 Hallway hallway = Map[j, k].GetHallway(Direction.South);
-                                if (hallway.IsCollapsable)
+                                if (hallway.IsCollapsable == false)
                                 {
-                                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
                                 }
                                 if (hallway.IsCollapsed)
                                 {
@@ -334,7 +333,7 @@ namespace RogueDungeonCrawler
         {
             Console.WriteLine("give x and y coördinates of the startroom like so 1,5");
             CheckStartInput(Console.ReadLine(), true);
-            this.CleanPath();
+            this.CleanPathAndCollapsable();
             DrawMap();
         }
 
@@ -342,7 +341,7 @@ namespace RogueDungeonCrawler
         {
             Console.WriteLine("give x and y coördinates of the endroom like so 1,5");
             CheckStartInput(Console.ReadLine(), false);
-            this.CleanPath();
+            this.CleanPathAndCollapsable();
             DrawMap();
         }
 
@@ -356,7 +355,7 @@ namespace RogueDungeonCrawler
 
         public void HandleTalisman()
         {
-            this.CleanPath();
+            this.CleanPathAndCollapsable();
             DrawMap();
             Room startVertex = this.StartRoom;
             var shortestPath = this.Algorithms.ShortestPathFunction<Room>(this, this.StartRoom);
@@ -381,14 +380,16 @@ namespace RogueDungeonCrawler
 
         public void HandleGrenade()
         {
+            CleanPathAndCollapsable();
             DrawMap();
+            this.Algorithms.PrimsSafetyProtocol(this, this.StartRoom);
             for (int i = 0; i < 4; i++)
             {
                 Hallway hallway = this.StartRoom.GetHallway((Direction)i);
-                if (hallway != null)
-                {
-                    //Check if hallways is collapsable
-
+                
+                //Check if hallways is collapsable
+                if (hallway != null && hallway.IsCollapsable == true)
+                {    
                     //If yes: Collapse hallway:
                     hallway.IsCollapsed = true;
                 }
@@ -544,10 +545,17 @@ namespace RogueDungeonCrawler
         }
 
         //Sets the isVisited property of all rooms to false
-        public void CleanPath()
+        public void CleanPathAndCollapsable()
         {
             foreach (Room room in this.Map)
             {
+                foreach (Hallway hallway in room.GetHallways())
+                {
+                    if (hallway != null)
+                    {
+                        hallway.IsCollapsable = true;
+                    }
+                }
                 room.IsVisited = false;
             }
         }
