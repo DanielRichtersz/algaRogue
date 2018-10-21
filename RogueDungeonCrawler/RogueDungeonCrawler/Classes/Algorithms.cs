@@ -33,51 +33,6 @@ namespace RogueDungeonCrawler.Classes
             return neighbors;
         }
 
-        public HashSet<Room> BreadthFirstSearch(Level level, Room startVertex)
-        {
-            var visited = new HashSet<Room>();
-
-            //If the starting room doesn't exist, return empty
-            if (level.GetRoom(startVertex) != null)
-            {
-                return visited;
-            }
-
-            //Create queue and add starting room to the end of the queue
-            var queue = new Queue<Room>();
-            queue.Enqueue(startVertex);
-
-            //While the queue is not empty
-            while (queue.Count > 0)
-            {
-                //Remove the room at beginning of queue
-                Room vertex = queue.Dequeue();
-
-                //If the list of visited rooms contains the last gotten room, continue to next room
-                if (visited.Contains(vertex))
-                {
-                    continue;
-                }
-
-                //PreVisit possibility
-
-                visited.Add(vertex);
-
-                //Foreach neighbor, check if it has been visited, if not add to queue
-                foreach (Room room in GetNeighbors(level, vertex))
-                {
-                    if (room != null)
-                    {
-                        if (visited.Contains(room))
-                        {
-                            queue.Enqueue(room);
-                        }
-                    }
-                }
-            }
-            return visited;
-        }
-
         public Func<Room, IEnumerable<Room>> ShortestPathFunction<T>(Level level, Room startRoom)
         {
             //Contains previous node from destination node to starting node
@@ -183,9 +138,9 @@ namespace RogueDungeonCrawler.Classes
                 foreach (Room n in visited)
                 {
                     //To show what rooms are visited with the algorithm
-                    n.IsVisited = true;
-                    level.DrawMap();
-                    Thread.Sleep(20);
+                    //n.IsVisited = true;
+                    //level.DrawMap();
+                    //Thread.Sleep(25);
 
                     Hallway h = n.GetLowestLevelHallway(visited);
                     if (h != null && h.Enemy < lowestHallway.Enemy)
@@ -204,7 +159,11 @@ namespace RogueDungeonCrawler.Classes
                 unvisited.Remove(lowestRoom);
             }
 
+            //To remove the discovery animation
+            level.CleanPathAndCollapsable();
+
             //This can be done in the above while loop, not using a list of notCollapsable but immediately setting the notCollapsable property
+            //Also better this way to make the discovery animation
             foreach (Hallway h in notCollapsable)
             {
                 h.IsCollapsable = false;
@@ -248,6 +207,11 @@ namespace RogueDungeonCrawler.Classes
             //While there are still unvisited rooms
             while (unvisited.Count > 0)
             {
+                //To show what rooms are visited with the algorithm
+                currentRoom.IsVisited = true;
+                level.DrawMap();
+                Thread.Sleep(25);
+
                 //For each hallway for current room
                 foreach (Hallway hallway in currentRoom.GetHallways())
                 {
@@ -296,13 +260,25 @@ namespace RogueDungeonCrawler.Classes
                 }
                 //Remove currentRoom and add to visited
                 unvisited.Remove(currentRoom);
+                if (currentRoom == endRoom)
+                {
+                    break;
+                }
                 visited.Add(currentRoom);
             }
+
+            //Clean discovery animations
+            level.CleanPathAndCollapsable();
 
             //Get the path and reverse
             Room reverse = endRoom;
             while (reverse != null)
             {
+                //Draw route animation
+                reverse.IsVisited = true;
+                level.DrawMap();
+                Thread.Sleep(400);
+
                 reversePath.Add(reverse);
                 var reverseCost = cost[reverse];
                 reverse = reverseCost.Key;
