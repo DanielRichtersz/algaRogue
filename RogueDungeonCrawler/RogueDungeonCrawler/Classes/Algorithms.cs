@@ -149,10 +149,24 @@ namespace RogueDungeonCrawler.Classes
                 //While the current room doesn't equal the start room
                 while (!current.Equals(startRoom))
                 {
-                    //Add the current room to path
-                    path.Add(current);
+                    //Add the current room to path                     
                     //and select next (or actually previous) room
-                    current = previous[current];
+                    path.Add(current);
+
+                    //If the previous room is null (which is not supposed to happen)
+                    try
+                    {
+                        current = previous[current];
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        //And the only room in the path list isn't the same as the start room (which could happen if the start and endroom are the same)
+                        if (startRoom != v)
+                        {
+                            //return null indicating there is no path to the target
+                            return null;
+                        }
+                    }
                 };
 
                 //Add the last room (starting room)

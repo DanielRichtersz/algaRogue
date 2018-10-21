@@ -46,7 +46,7 @@ namespace RogueDungeonCrawler
             {
                 for (int j = 0; j < this.Height; j++)
                 {
-                    if (Map[j,i] == room)
+                    if (Map[j, i] == room)
                     {
                         return Map[j, i];
                     }
@@ -58,7 +58,7 @@ namespace RogueDungeonCrawler
         internal void Move(Direction moveDirection)
         {
             Hallway moveDirectionHallway = this.StartRoom.GetHallway(moveDirection) ?? null;
-            if (moveDirectionHallway != null)
+            if (moveDirectionHallway != null && moveDirectionHallway.IsCollapsed == false)
             {
                 this.CleanPath();
                 this.StartRoom.IsStart = false;
@@ -78,28 +78,28 @@ namespace RogueDungeonCrawler
             Map = new Room[Height, Width];
 
             //Generate rooms and hallways
-            for(int i = 0; i < Width; i++)
+            for (int i = 0; i < Width; i++)
             {
-                for(int j = 0; j < Height; j++)
+                for (int j = 0; j < Height; j++)
                 {
                     Room newRoom = new Room();
-                    if(j < Height- 1)
+                    if (j < Height - 1)
                     {
                         Hallway northHallway = new Hallway(random.Next(10), newRoom);
                         newRoom.SetHallway(Direction.North, northHallway);
                     }
-                    if(i < Width - 1)
+                    if (i < Width - 1)
                     {
                         Hallway eastHallway = new Hallway(random.Next(10), newRoom);
                         newRoom.SetHallway(Direction.East, eastHallway);
                     }
-                    if(j != 0)
+                    if (j != 0)
                     {
                         Hallway southHallway = Map[j - 1, i].GetHallway(Direction.North);
                         southHallway.SetSecondRoom(newRoom);
                         newRoom.SetHallway(Direction.South, southHallway);
                     }
-                    if(i != 0)
+                    if (i != 0)
                     {
                         Hallway westHallway = Map[j, i - 1].GetHallway(Direction.East);
                         westHallway.SetSecondRoom(newRoom);
@@ -118,7 +118,7 @@ namespace RogueDungeonCrawler
         private bool RemoveHallway(Room room, Direction direction)
         {
             Hallway removableHallway = room.GetHallway(direction);
-            if(removableHallway != null)
+            if (removableHallway != null)
             {
                 Room connectedRoom = removableHallway.GetConnectedRoom(room);
                 room.SetHallway(direction, null);
@@ -180,7 +180,7 @@ namespace RogueDungeonCrawler
 
         public void SetEndRoom(int x, int y)
         {
-            if(x < 1 || x > Width || y < 1 || y > Height)
+            if (x < 1 || x > Width || y < 1 || y > Height)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("The inserted position is not available in the current map");
@@ -357,9 +357,13 @@ namespace RogueDungeonCrawler
         public void HandleTalisman()
         {
             this.CleanPath();
+            DrawMap();
             Room startVertex = this.StartRoom;
             var shortestPath = this.Algorithms.ShortestPathFunction<Room>(this, this.StartRoom);
+
             List<Room> pathToEndRoom = (List<Room>)shortestPath(this.EndRoom);
+            if (pathToEndRoom != null)
+            {
                 foreach (Room room in pathToEndRoom)
                 {
                     room.IsVisited = true;
@@ -369,11 +373,29 @@ namespace RogueDungeonCrawler
                 }
                 Console.WriteLine("The talisman whispers to you: 'The endroom is " + (pathToEndRoom.Count - 1) + " rooms away'");
             }
+            else
+            {
+                Console.WriteLine("The talisman whispers to you: 'You are to die in this place, for there is no possible path to the endroom!");
+            }
+        }
 
         public void HandleGrenade()
         {
             DrawMap();
+            for (int i = 0; i < 4; i++)
+            {
+                Hallway hallway = this.StartRoom.GetHallway((Direction)i);
+                if (hallway != null)
+                {
+                    //Check if hallways is collapsable
+
+                    //If yes: Collapse hallway:
+                    hallway.IsCollapsed = true;
+                }
+            }
             Console.WriteLine("You throw the grenade in a random direction...");
+            DrawMap();
+            Console.WriteLine("You hear it explode, and wonder what the explosion has hit");
         }
 
         public void HandleCompass()
@@ -409,7 +431,7 @@ namespace RogueDungeonCrawler
                     Console.WriteLine(" is not a valid number");
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine();
-                    if(isStart)
+                    if (isStart)
                     {
                         HandleSetStart();
                     }
