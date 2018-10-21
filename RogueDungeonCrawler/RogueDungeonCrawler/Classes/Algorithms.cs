@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RogueDungeonCrawler.Enum;
+using System;
 using System.Collections.Generic;
 
 
@@ -192,21 +193,23 @@ namespace RogueDungeonCrawler.Classes
                 unvisited.Add(room);
             }
 
+            //Haal de startkamer uit unvisited en doe deze bij visited (eerste kamer om vanuit te werken)
             unvisited.Remove(startRoom);
             visited.Add(startRoom);
 
-
-
+            //While unvisited is not empty           
             while (unvisited.Count > 0)
             {
                 Room lowestRoom = new Room();
                 Hallway lowestHallway = new Hallway(999, null);
 
+                //Check foreach room which hallway has the lowest cost
                 foreach (Room n in visited)
                 {
                     Hallway h = n.GetLowestLevelHallway(visited);
                     if (h != null && h.Enemy < lowestHallway.Enemy)
                     {
+                        //Set lowestHallway and lowestRoom to the lowestcost hallway and the connected room
                         lowestHallway = h;
                         lowestRoom = h.GetConnectedRoom(n);
                     }
@@ -220,13 +223,23 @@ namespace RogueDungeonCrawler.Classes
                 unvisited.Remove(lowestRoom);
             }
 
+            //This can be done in the above while loop, not using a list of notCollapsable but immediately setting the notCollapsable property
             foreach (Hallway h in notCollapsable)
             {
                 h.IsCollapsable = false;
             }
 
-            //Explode random room
-            
+            //Explode random 
+            Random random = new Random();
+            while (true)
+            {
+                Hallway hallway = startRoom.GetHallway((Direction)random.Next(1, 4));
+                if (hallway != null)
+                {
+                    hallway.Enemy = 0;
+                    break;
+                }
+            }
 
         }
     }
