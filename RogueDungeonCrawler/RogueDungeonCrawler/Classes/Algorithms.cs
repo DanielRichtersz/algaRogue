@@ -238,16 +238,22 @@ namespace RogueDungeonCrawler.Classes
             //While there are still unvisited rooms
             while (unvisited.Count > 0)
             {
-
+                //For each hallway for current room
                 foreach (Hallway hallway in currentRoom.GetHallways())
                 {
+                    //Check null or collapsed
                     if (hallway != null && hallway.IsCollapsed == false)
                     {
+                        //Set cost to infinite
                         int currentCost = int.MaxValue;
+
+                        //Get the connected room
                         Room nextRoom = hallway.GetConnectedRoom(currentRoom);
 
+                        //Calculate cost
                         currentCost = cost[currentRoom].Value + hallway.Enemy;
 
+                        //Compare costs
                         if (cost.ContainsKey(nextRoom))
                         {
                             if (cost[nextRoom].Value > currentCost)
@@ -262,19 +268,23 @@ namespace RogueDungeonCrawler.Classes
                     }
                 }
 
+                //Set lowestcost again to maxvalue to compare it with other values
                 int lowestCost = int.MaxValue;
                 foreach (var x in cost)
                 {
+                    //If the value is lower than lowestCost and the room isn't in visited anymore, set currentRoom to x.key and lowestcost to the cost of x.key
                     if (x.Value.Value < lowestCost && visited.Contains(x.Key) == false)
                     {
                         currentRoom = x.Key;
                         lowestCost = x.Value.Value;
                     }
                 }
+                //Remove currentRoom and add to visited
                 unvisited.Remove(currentRoom);
                 visited.Add(currentRoom);
             }
 
+            //Get the path and reverse
             Room reverse = endRoom;
             while (reverse != null)
             {
