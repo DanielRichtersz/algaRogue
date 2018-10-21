@@ -23,7 +23,7 @@ namespace RogueDungeonCrawler.Classes
             NorthNeighbor = NorthNeighborHallway == null || NorthNeighborHallway.IsCollapsed ? null : NorthNeighborHallway.GetConnectedRoom(vertex);
             EastNeighbor = EastNeighborHallway == null || EastNeighborHallway.IsCollapsed ? null : EastNeighborHallway.GetConnectedRoom(vertex);
             SouthNeighbor = SouthNeighborHallway == null || SouthNeighborHallway.IsCollapsed ? null : SouthNeighborHallway.GetConnectedRoom(vertex);
-            WestNeighbor = WestNeighborHallway == null || WestNeighborHallway.IsCollapsed? null : WestNeighborHallway.GetConnectedRoom(vertex);
+            WestNeighbor = WestNeighborHallway == null || WestNeighborHallway.IsCollapsed ? null : WestNeighborHallway.GetConnectedRoom(vertex);
 
             List<Room> neighbors = new List<Room>();
             neighbors.Add(NorthNeighbor);
@@ -78,36 +78,6 @@ namespace RogueDungeonCrawler.Classes
             return visited;
         }
 
-        public List<Room> DijkstraShortestPath(Level level, Room startRoom, Room endRoom)
-        {
-            var previous = new Dictionary<Room, Room>();
-            var distances = new Dictionary<Room, int>();
-            var nodes = new List<Room>();
-
-            List<Room> path = null;
-
-            foreach (var vertex in level.GetMap())
-            {
-                if (vertex.IsStart)
-                {
-                    distances[vertex] = 0;
-                }
-                else
-                {
-                    distances[vertex] = int.MaxValue;
-                }
-
-                nodes.Add(vertex);
-            }
-
-            while (nodes.Count != 0)
-            {
-                
-            }
-            //Added return statement, else a ''not all paths return a value '' error was given
-            return path;
-        }
-
         public Func<Room, IEnumerable<Room>> ShortestPathFunction<T>(Level level, Room startRoom)
         {
             //Contains previous node from destination node to starting node
@@ -142,7 +112,8 @@ namespace RogueDungeonCrawler.Classes
             }
 
             //The return function
-            Func<Room, IEnumerable<Room>> shortestPath = v => {
+            Func<Room, IEnumerable<Room>> shortestPath = v =>
+            {
                 List<Room> path = new List<Room> { };
 
                 Room current = v;
@@ -186,7 +157,7 @@ namespace RogueDungeonCrawler.Classes
             List<Room> visited = new List<Room>();
             List<Room> unvisited = new List<Room>();
             List<Hallway> notCollapsable = new List<Hallway>();
-            
+
             //Add all nodes to the unvisited
             foreach (Room room in level.GetMap())
             {
@@ -240,7 +211,80 @@ namespace RogueDungeonCrawler.Classes
                     break;
                 }
             }
+        }
 
+        public List<Room> DijkstraShortestPath(Level level, Room startRoom, Room endRoom)
+        {
+            Dictionary<Room, KeyValuePair<Room, int>> cost = new Dictionary<Room, KeyValuePair<Room, int>>();
+            List<Room> visited = new List<Room>();
+            List<Room> unvisited = new List<Room>();
+            List<Room> reversePath = new List<Room>();
+
+            Room currentRoom = startRoom;
+
+            //Add all rooms to unvisited list
+            foreach (Room room in level.GetMap())
+            {
+                unvisited.Add(room);
+            }
+
+            //Remove startroom and add to visited (like in MST)
+            unvisited.Remove(startRoom);
+            visited.Add(startRoom);
+
+            //Add startroom to cost, with a cost of 0
+            cost.Add(startRoom, new KeyValuePair<Room, int>(null, 0));
+
+            //While there are still unvisited rooms
+            while (unvisited.Count > 0)
+            {
+
+                foreach (Hallway hallway in currentRoom.GetHallways())
+                {
+                    if (hallway != null && hallway.IsCollapsed == false)
+                    {
+                        int currentCost = int.MaxValue;
+                        Room nextRoom = hallway.GetConnectedRoom(currentRoom);
+
+                        currentCost = cost[currentRoom].Value + hallway.Enemy;
+
+                        if (cost.ContainsKey(nextRoom))
+                        {
+                            if (cost[nextRoom].Value > currentCost)
+                            {
+                                cost[nextRoom] = new KeyValuePair<Room, int>(currentRoom, currentCost);
+                            }
+                        }
+                        else
+                        {
+                            cost.Add(nextRoom, new KeyValuePair<Room, int>(currentRoom, currentCost));
+                        }
+                    }
+                }
+
+                int lowestCost = int.MaxValue;
+                foreach (var x in cost)
+                {
+                    if (x.Value.Value < lowestCost && visited.Contains(x.Key) == false)
+                    {
+                        currentRoom = x.Key;
+                        lowestCost = x.Value.Value;
+                    }
+                }
+                unvisited.Remove(currentRoom);
+                visited.Add(currentRoom);
+            }
+
+            Room reverse = endRoom;
+            while (reverse != null)
+            {
+                reversePath.Add(reverse);
+                var reverseCost = cost[reverse];
+                reverse = reverseCost.Key;
+            }
+
+            reversePath.Reverse();
+            return reversePath;
         }
     }
 }

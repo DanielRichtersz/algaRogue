@@ -396,13 +396,31 @@ namespace RogueDungeonCrawler
             }
             Console.WriteLine("You throw the grenade in a random direction...");
             DrawMap();
-            Console.WriteLine("You hear it explode, and wonder what the explosion has hit");
+            Console.WriteLine("You hear the grenade explode, and wonder what the explosion has hit");
         }
 
         public void HandleCompass()
         {
+            CleanPathAndCollapsable();
             DrawMap();
             Console.WriteLine("You activate the magical compass...");
+            List<Room> shortestPathDijkstra = this.Algorithms.DijkstraShortestPath(this, this.StartRoom, this.EndRoom);
+            if (shortestPathDijkstra.Count > 0)
+            {
+                foreach (Room room in shortestPathDijkstra)
+                {
+                    room.IsVisited = true;
+                    DrawMap();
+                    Thread.Sleep(400);
+                    Console.WriteLine("You activate the magical compass...");
+                }
+                DrawMap();
+                Console.WriteLine("The compass points you to the safest passage");
+            }
+            else
+            {
+                Console.WriteLine("The compass keeps pointing in another direction. Maybe there is no way out?");
+            }
         }
 
         private void CheckStartInput(string RoomCoördinates, bool isStart)
