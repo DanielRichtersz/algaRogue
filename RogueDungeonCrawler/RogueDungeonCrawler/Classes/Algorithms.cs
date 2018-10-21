@@ -94,9 +94,9 @@ namespace RogueDungeonCrawler.Classes
                 Room vertex = queue.Dequeue();
 
                 //To show what rooms are visited with the algorithm
-                vertex.IsVisited = true;
-                level.DrawMap();
-                Thread.Sleep(100);
+                //vertex.IsVisited = true;
+                //level.DrawMap();
+                //Thread.Sleep(100);
 
                 //Check for all neighbors
                 foreach (Room neighbor in GetNeighbors(level, vertex))
@@ -183,9 +183,9 @@ namespace RogueDungeonCrawler.Classes
                 foreach (Room n in visited)
                 {
                     //To show what rooms are visited with the algorithm
-                    n.IsVisited = true;
-                    level.DrawMap();
-                    Thread.Sleep(20);
+                    //n.IsVisited = true;
+                    //level.DrawMap();
+                    //Thread.Sleep(20);
 
                     Hallway h = n.GetLowestLevelHallway(visited);
                     if (h != null && h.Enemy < lowestHallway.Enemy)
@@ -252,9 +252,9 @@ namespace RogueDungeonCrawler.Classes
                 foreach (Hallway hallway in currentRoom.GetHallways())
                 {
                     //To show what rooms are visited with the algorithm
-                    currentRoom.IsVisited = true;
-                    level.DrawMap();
-                    Thread.Sleep(50);
+                    //currentRoom.IsVisited = true;
+                    //level.DrawMap();
+                    //Thread.Sleep(50);
 
                     //Check null or collapsed
                     if (hallway != null && hallway.IsCollapsed == false)
