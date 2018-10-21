@@ -361,6 +361,10 @@ namespace RogueDungeonCrawler
             var shortestPath = this.Algorithms.ShortestPathFunction<Room>(this, this.StartRoom);
 
             List<Room> pathToEndRoom = (List<Room>)shortestPath(this.EndRoom);
+
+            //Clean showing what rooms were investigated in the algorithm
+            this.CleanPathAndCollapsable();
+
             if (pathToEndRoom != null)
             {
                 foreach (Room room in pathToEndRoom)
@@ -382,7 +386,11 @@ namespace RogueDungeonCrawler
         {
             CleanPathAndCollapsable();
             DrawMap();
+
+            //Let the algorithm select all noncollapsable rooms
             this.Algorithms.PrimsSafetyProtocol(this, this.StartRoom);
+
+            //Foreach hallway connected to the current room
             for (int i = 0; i < 4; i++)
             {
                 Hallway hallway = this.StartRoom.GetHallway((Direction)i);
@@ -394,8 +402,8 @@ namespace RogueDungeonCrawler
                     hallway.IsCollapsed = true;
                 }
             }
-            Console.WriteLine("You throw the grenade in a random direction...");
             DrawMap();
+            Console.WriteLine("You throw the grenade in a random direction...");
             Console.WriteLine("You hear the grenade explode, and wonder what the explosion has hit");
         }
 

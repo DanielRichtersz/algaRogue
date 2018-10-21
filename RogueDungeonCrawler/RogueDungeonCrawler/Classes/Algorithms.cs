@@ -1,7 +1,7 @@
 ﻿using RogueDungeonCrawler.Enum;
 using System;
 using System.Collections.Generic;
-
+using System.Threading;
 
 namespace RogueDungeonCrawler.Classes
 {
@@ -93,6 +93,11 @@ namespace RogueDungeonCrawler.Classes
                 //Take first Room from queue and remove from queue
                 Room vertex = queue.Dequeue();
 
+                //To show what rooms are visited with the algorithm
+                vertex.IsVisited = true;
+                level.DrawMap();
+                Thread.Sleep(100);
+
                 //Check for all neighbors
                 foreach (Room neighbor in GetNeighbors(level, vertex))
                 {
@@ -177,6 +182,11 @@ namespace RogueDungeonCrawler.Classes
                 //Check foreach room which hallway has the lowest cost
                 foreach (Room n in visited)
                 {
+                    //To show what rooms are visited with the algorithm
+                    n.IsVisited = true;
+                    level.DrawMap();
+                    Thread.Sleep(20);
+
                     Hallway h = n.GetLowestLevelHallway(visited);
                     if (h != null && h.Enemy < lowestHallway.Enemy)
                     {
@@ -241,6 +251,11 @@ namespace RogueDungeonCrawler.Classes
                 //For each hallway for current room
                 foreach (Hallway hallway in currentRoom.GetHallways())
                 {
+                    //To show what rooms are visited with the algorithm
+                    currentRoom.IsVisited = true;
+                    level.DrawMap();
+                    Thread.Sleep(50);
+
                     //Check null or collapsed
                     if (hallway != null && hallway.IsCollapsed == false)
                     {
